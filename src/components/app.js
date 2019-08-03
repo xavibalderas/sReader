@@ -21,7 +21,8 @@ class App extends React.Component {
      super(props);
      this.socket = null;
      this.state = {
-       message: 'Waiting for a message'
+       message: 'Waiting for a message',
+       led: false
      }
 
    }
@@ -29,8 +30,6 @@ class App extends React.Component {
     componentDidMount(){
       this.socket = new io(socket_path);
       this.socket.on('message', (data)=>{
-        console.log(data);
-        console.log()
         this.setState({message: data});
       });
       this.socket.on('connect', ()=>{
@@ -38,8 +37,16 @@ class App extends React.Component {
       })
     }
 
+    switchLed(){
+      var led = this.state.led;
+      led =! led;
+      this.setState({led: led});
+      this.socket.emit("led", led);
+    }
+
     render(){
       const message = this.state.message;
+      const led = this.state.led;
       return <Grommet theme={theme}>
           <Box
             direction="column"
@@ -50,7 +57,7 @@ class App extends React.Component {
           >
           <Heading>Let's ferment!!</Heading>
           <Text>{message}</Text>
-          <Button label="Led on" onClick={() => {}} />
+          <Button label="Led on" active={led} onClick={()=>{this.switchLed()}} />
           </Box>
       </Grommet>;
     }
