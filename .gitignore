@@ -1,10 +1,7 @@
-node_modules/**/*
-.expo/*
-npm-debug.*
-*.jks
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
-web-report/
+# Deployment directories
+node_modules
+dist
+# Optional npm cache directory
+.npm
+# Mac
+.DS_Store
