@@ -1,5 +1,5 @@
 import React from 'react'
-import {Grommet, Box, Heading, Button, Text} from 'grommet'
+import {Grommet, Box, Heading, Button, Text, Chart} from 'grommet'
 import io from 'socket.io-client';
 
 
@@ -13,8 +13,8 @@ const theme = {
   },
 };
 
-//const socket_path = "http://fermentadora.local:3000";
-const socket_path = "http://localhost:3000";
+const socket_path = "http://fermentadora.local:3000";
+//const socket_path = "http://localhost:3000";
 
 class App extends React.Component {
   constructor(props) {
@@ -22,6 +22,8 @@ class App extends React.Component {
      this.socket = null;
      this.state = {
        message: 'Waiting for a message',
+       temperatures: [],
+       lastReceived: -1,
        led: false
      }
 
@@ -31,6 +33,13 @@ class App extends React.Component {
       this.socket = new io(socket_path);
       this.socket.on('message', (data)=>{
         this.setState({message: data});
+      });
+      this.socket.on('temperature', (data)=>{
+        var _t = this.state.temperatures;
+        this.setState({
+          lastReceived: data,
+          temperatures: [...this.state.temperatures, data]
+        });
       });
       this.socket.on('connect', ()=>{
         console.log('connected');
@@ -46,6 +55,8 @@ class App extends React.Component {
 
     render(){
       const message = this.state.message;
+      const temperatures = this.state.temperatures;
+      const lastReceived = this.state.lastReceived;
       const led = this.state.led;
       return <Grommet theme={theme}>
           <Box
@@ -57,7 +68,9 @@ class App extends React.Component {
           >
           <Heading>Let's ferment!!</Heading>
           <Text>{message}</Text>
+          <Text>Current temperature: {lastReceived}</Text>
           <Button label="Led on" active={led} onClick={()=>{this.switchLed()}} />
+          <Chart type="line" values={temperatures} thickness="xsmall" type="area" />
           </Box>
       </Grommet>;
     }
