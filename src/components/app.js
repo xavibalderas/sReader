@@ -70,7 +70,7 @@ class App extends React.Component {
           <Text>{message}</Text>
           <Text>Current temperature: {lastReceived}</Text>
           <Button label="Led on" active={led} onClick={()=>{this.switchLed()}} />
-          <Chart type="line" values={temperatures} thickness="xsmall" type="area" />
+          <Chart values={temperatures} thickness="xsmall" type="area" />
           </Box>
       </Grommet>;
     }
