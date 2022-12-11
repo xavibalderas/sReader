@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@nivo/line": "^0.59.3",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "grommet": "^2.7.4",
     "polished": "^3.4.1",
     "react": "^16.8.6",
